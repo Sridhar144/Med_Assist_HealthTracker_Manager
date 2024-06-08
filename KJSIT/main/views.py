@@ -31,6 +31,7 @@ def handlesignup(request):
         username=request.POST.get('username')
         email=request.POST.get('email')
         pass1=request.POST.get('pass1')
+        print(username)
         # bio=request.POST['bio']
         
         # website=request.POST['website']
