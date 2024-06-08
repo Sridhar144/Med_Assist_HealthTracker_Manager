@@ -1,0 +1,108 @@
+{% extends "base_medpred.html" %}
+
+{% load static %}
+
+{% block title %}
+    MedAssist | Your medical assistant
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'medpred/Header.css' %}">
+<link rel="stylesheet" href="{% static 'introduction_css/style.css' %}">
+<link rel="stylesheet" href="{% static 'medpred/Footer.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <script>
+        $(function () {
+    var reportContainer = $("#report-container").get(0);
+
+    // Initialize iframe for embedding report
+    powerbi.bootstrap(reportContainer, { type: "report" });
+
+    var models = window["powerbi-client"].models;
+    var reportLoadConfig = {
+        type: "report",
+        tokenType: models.TokenType.Embed,
+
+        // Enable this setting to remove gray shoulders from embedded report
+        // settings: {
+        //     background: models.BackgroundType.Transparent
+        // }
+    };
+
+    // Function to resize the iframe
+    function resizeIframe() {
+            iframe.style.width = "100%"; // Set width to 100%
+            iframe.style.height = ""; // Reset height to default
+    }
+
+    // Call the resize function when the window is resized or loaded
+    window.onresize = resizeIframe;
+    window.onload = resizeIframe;
+
+        // type: "GET",
+        // url: "/getembedinfo",
+        // dataType: "json",
+        data={"tokenId": "a6234d19-66d6-4b73-b062-7389a5d938a8", "accessToken": "H4sIAAAAAAAEACWUNa7tBgAF9_JaRzJTpF-YmfHezszMjrL3PCn9qeZo5p8fO3n6Kcl__v4ZettXhe-2A7QKyc0worHTNZrifBSJiLKr0V-QbsW1QR1sYvBwx1pTxpLVfE7soalmb_m4KyPrKRvXZmX1Y2dnt1E1cG0iwMR8hmb1vTEa2csKBaFKEKdOJQFe4T5jDEfYUuB2Q3XG-1UtOSIvAPl-soI1Mlaut32aklGwJOem407sAaIgm7vfMQ3mQNKEIrdZu9K-ufbmcbQR13ZMTFSj8HDxhMdM9pmDQ9jyyYetQSJkbdk8sXUd-0D20gHwlu7bCzY12suV0J5a67Zrul0l4NauwhhLAZRxIL6KgJIKBTA1KkIvx3PiSCTTeQAUfdmvAMQqRnvHLMOzeRm71wKJ-e6fXsgPvlUWZTniMwWFLfehRgqtLxlwUQfZWfWMCRjOT8ltRXPTMs3trghPiHwMlgdXgaahgEy4BeEUmsitUdKf3Bdh-sh16I18Za7Qg8PI7lz5hK4jjqAuz3kcdMjpEYV3AodtVKZ5kfztFHRUt_tWTmjgUjGa3lRr5cKkscp0vAX5HsOYk4Wnw1vEjwhrPe_0OmVPOKw-X7h_JJIO7oCHzXYW3mG-Zgbk6uzIm-FoAyT7tWkGmWUva_YFlHS7ZFvHMzdXSD1gSEI5dHTyBKSDo_LgLlUyAa8sX4rYQEGnrTO4iFXPQm-sSvKVxjR_a8PV2Vje5sn3VdDV6AUmrCT5wnbhm1CTgS9YNqky29-1Rkt8LYK3trE-9UxhboVE1zdn3SFHoR3Zy4cEMOKkt5m97ApTF--7yah-jg6cbDuDUsJI_UJn9AXaheXjtJbrNUWiFsan07p2AyG6UgjSAzLhaSOkIiGdddM_jaIJBJ6F5HP7AHL0RdQxL7IEHhLNNBUyf_78_PXDrc-8T1rx_GrG2PXHNusEhWHIur3G8iSpwLIcJCSdm70pHpmWqUFz0j4qr4iL2y4mIRL7fAqaXUn2paS2seMuNicfEnb0HKzCzAEf38FW1FqeaqY-Cv5Ck89fSmHUVneNiH_U6W5DVGeKSfDJ1humn_vjz8sg9b0WPKSJ1zwG-4xRL6TPG7ECotwqV4t_48t0-iSyXB-GxAOkFBNUxvF9KFABQcxmEDTrZPsJTj4ST6g9pBAOw68Wnd5roK9I2QoivpL4p1g-bNfOYfnO6PEss5jyLrqk58QlgUn_dmZE3LTrFKB-VdGJM1IdLtR9oU5-40P_Gnsz7oJbLaU74GfNu44F62Av6bKRyKnzP-ZnrotVCX8pp-GXthI0A7-tIreMKPbbbf1_htdUY7Ifa_E7i702eIT47C5A3k9i1QfIEZ85dLfqgEudhGaSKtVJKttfBfm3Zsk2s3LsIGCCjhrXW2rIZ2SObmREvTK5SOOA7XxFhzVgNik7E0j5W8VqmR7SRl6OI3b3rQnatowd12Ibgp_oXbtmRVJR6bzt1BKBZIi8SlWaXm5yfqFfm0p3Wnp1H2rdwfBxBCWkSCfCFiSA0LSuSm-nk_A9tC1oN-s-K--AEaGwxx1GQaq50dr1oEyrOMqpM5NrpPJJem1WI3xyk3Hv5hdpxpwjGoxO9FlpBWxA17CokoIt2VmpYJNAm5U7ini-6Hy2zKUUzrUJ26FvvajH4jsdeMoAhIrqhqy29bz6xfzvfwEFL11aBgAA.eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly9XQUJJLUlORElBLUNFTlRSQUwtQS1QUklNQVJZLXJlZGlyZWN0LmFuYWx5c2lzLndpbmRvd3MubmV0IiwiZXhwIjoxNzE3MTgwNDg5LCJhbGxvd0FjY2Vzc092ZXJQdWJsaWNJbnRlcm5ldCI6dHJ1ZX0=", "tokenExpiry": "2024-05-31T18:34:49Z", "reportConfig": [{"reportId": "421e6b78-1ae3-45a2-be4a-2479be53d063", "reportName": "proj1", "embedUrl": "https://app.powerbi.com/reportEmbed?reportId=421e6b78-1ae3-45a2-be4a-2479be53d063&groupId=fc46d0ec-ff4d-48e2-bdbf-232747fd3709&w=2&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly9XQUJJLUlORElBLUNFTlRSQUwtQS1QUklNQVJZLXJlZGlyZWN0LmFuYWx5c2lzLndpbmRvd3MubmV0IiwiZW1iZWRGZWF0dXJlcyI6eyJ1c2FnZU1ldHJpY3NWTmV4dCI6dHJ1ZX19", "datasetId": null}]}
+        // data={"tokenId": "3edf93f1-ec37-4f06-88cd-f866bdbd7fa3", "accessToken": "H4sIAAAAAAAEAC2Tta7EVgAF_-W1jrRmiJTCzF4zdcY1XDNvlH_Pi5R-NMUcnb9_7OwBU1b-_PmDaLtdfplPUicNN-DvJAvB1NrFjJ4RLWTi-iTHp41W785XE6u4QMYEIoNw4TFHdeoC1_zsKmQeDElEMN0qtcl7BWhIr3Z3kGgtX9mMXyWQb8XMxW5J96ApoYnkze6LswmMuScRV_qhE4-8YrKbvi0OO060SUwIQffQIDyB9yyWhkytx9jflRkLLu7Q4-y5g5eVYYmyKmjjt9AamzE336ww1fkt5tnHhpJeQwjPCzOEXqhx0Sc-bN6JJ094V3vOLSr7xeCiroOLXR3tAn2wc3RhNphnj11MKFG-l94HdSVgtBlfp-edn48zygQ77m4gPM-t6kJ07cgM-RwsQ6UvYdoagh7XOJMVssqwEuT1CEGspX2d2L8eCsqmyKF6BcgVHbydlG3rBEcgxS14VK-UL7n7G7y8OBTYoNDFgL5OSD-1a04RdpMBXSB4GmFOtN0xNjShlXaNhB1Fx7Sv4OUxR1NHCTHN2w3iCFiCm36Y1hq_DuzaHtlKhrXN01CJyVhfovoCs1EPFV1TGY-4A4Zj3-p073TCprVR6QK34gWSO3HGcVhGQ8hVVS5BvbyDwt52-3qYeiW_1MoPpYeLOXjMbYROMambuX7aM28t4ZwQCtISiOr0WdQiFOxgFtiy3xYj7M7q-lLtPVTF_hq-lhBsOoNdNtIPpCGbuSoop11hsodTCqLHx6ZDkQcbxzuRHP70PRZslPoVWwc9XXVFAvQIPKQQFyLgabgSGp9t0n7oqMe3ZQBYr90P7H59Gw_u0HOHSyO_11Mgz9xDNQLm3naxNwE-Sb5t4UHWYaTb8u3MIeeSbLth3aP7uWeSgzxjpliSZd1q-_njh1-feZ_06vm9UzMQfRlfeVySGLJ0VPVxe7R6G4kEZzzWYIJPXogDL2fkMCm-Tmw4o1zkCK4QDOyOmNjN2Qocoo1c7ljtPA-plrhxHlz41aGC175gdxV2TBM5Wx9TgApjgWbZDkB_rExnqKb9bgvLGPyi3zKr9dS2jgYqzukn1TcfUTC5UsOVTCZ3KHfggzj5jCJUSt4dkc9-bgnpz9wLy0Y7HpCxqcPPfq3LUqldnuGUag8P-LRf4w6dDsYZpfGKAm6d1qpMSkKYTyjlxQkrM0q_zOXlSVCcknmHTsM4DPXHvnm2l4pd4CiLPaHX-w6L1BVLBiyaR2H7h4o3SSBNwbu37iQTheE34F8Z-9df_2V-5qZa1fC3cjbjJ-y0btOuWY2p6CXXyf-U137GbD_W6hfT66Al60QXQw5-A_xMvB1Ybdil9lXnOeMayLfIIqVvMqU9xhxQsEynscLtnE1APd-8lrPqVe1oD607RVjWfKvInZwgqXdP9nzq7FWL7N7UfHg-e_i90SjkYshriDM8WZJSYIjksOAREZziOitCBr8_YzBRMDUA24zeTjQdmJ2O8WQSuozYiS7MB848flHqrdRq8DvjUkOVuD_mpp8PaYwRDtDMJ8HLZ1i-jpfopWsl9AaKEBhTtYEom1MvHCU5jHdDr1LAvaYoD3Nbgx8bSNqRl9Px0uni9qpOyQHuEqtmjTecVjDLwbsT-xaziAJCvyiUkQHJNZVW4_XYa9jh9ATsOL-Z__kXATKQjEIGAAA=.eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly9XQUJJLUlORElBLUNFTlRSQUwtQS1QUklNQVJZLXJlZGlyZWN0LmFuYWx5c2lzLndpbmRvd3MubmV0IiwiZXhwIjoxNzE1ODYyOTI0LCJhbGxvd0FjY2Vzc092ZXJQdWJsaWNJbnRlcm5ldCI6dHJ1ZX0=", "tokenExpiry": "2024-05-16T12:35:24Z", "reportConfig": [{"reportId": "421e6b78-1ae3-45a2-be4a-2479be53d063", "reportName": "proj1", "embedUrl": "https://app.powerbi.com/reportEmbed?reportId=421e6b78-1ae3-45a2-be4a-2479be53d063&groupId=fc46d0ec-ff4d-48e2-bdbf-232747fd3709&w=2&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly9XQUJJLUlORElBLUNFTlRSQUwtQS1QUklNQVJZLXJlZGlyZWN0LmFuYWx5c2lzLndpbmRvd3MubmV0IiwiZW1iZWRGZWF0dXJlcyI6eyJ1c2FnZU1ldHJpY3NWTmV4dCI6dHJ1ZX19", "datasetId": null}]}
+            embedData = $.parseJSON(JSON.stringify(data));
+            reportLoadConfig.accessToken = embedData.accessToken;
+
+
+            // You can embed different reports as per your need
+            reportLoadConfig.embedUrl = embedData.reportConfig[0].embedUrl;
+
+            // Use the token expiry to regenerate Embed token for seamless end user experience
+            // Refer https://aka.ms/RefreshEmbedToken
+            tokenExpiry = embedData.tokenExpiry;
+
+            // Embed Power BI report when Access token and Embed URL are available
+            var report = powerbi.embed(reportContainer, reportLoadConfig);
+            console.log(report)
+            // Triggers when a report schema is successfully loaded
+            report.on("loaded", function () {
+                console.log("Report load successful")
+            });
+
+            // Triggers when a report is successfully embedded in UI
+            report.on("rendered", function () {
+                console.log("Report render successful")
+            });
+
+            // Clear any other error handler event
+            report.off("error");
+
+            // Below patch of code is for handling errors that occur during embedding
+            report.on("error", function (event) {
+                var errorMsg = event.detail;
+
+                // Use errorMsg variable to log error in any destination of choice
+                console.error(errorMsg);
+                return;
+            });
+        });
+
+    </script>
+<!-- https://app.powerbi.com/reportEmbed?reportId=<your_report_id>&groupId=<your_group_id>&embedToken=<your_embed_toke -->
+    <!-- Navbar -->
+    {% if user.is_authenticated %}
+        {% include 'Header_medpred.html' %}
+    {% else %}
+        {% include 'header_authenticate.html' %}
+    {% endif %}
+    <!-- <iframe id="myIframe" title="proj1" src="https://app.powerbi.com/reportEmbed?reportId=421e6b78-1ae3-45a2-be4a-2479be53d063&autoAuth=true&embeddedDemo=true" frameborder="0" allowFullScreen="true"></iframe>  -->
+    <!-- <iframe id="myIframe" title="proj1" src="https://app.powerbi.com/reportEmbed?reportId=421e6b78-1ae3-45a2-be4a-2479be53d063&groupId=fc46d0ec-ff4d-48e2-bdbf-232747fd3709&embedToken=H4sIAAAAAAAEAB2Tt66EVgBE_-W1WCItyZILYMmw5NgBl5xZsuV_97P7KUbnzPz9Y6V3P6Xg58-fu2ImaEuKuBCtoSxWizSiF-azY3bmtLo27VpzzujF3QGArrjfXB7srsT3eycjdcexGZu2Hu_XPrQuhRbAAbu0BKKDoPt37qoRJWUwTHGaOSSDE30aoTQ8N6SoCNLfBZFCuO1lKELMGNZCfWASt9QgEGloXL9O1zC8DutFvIpjtzCH9e3oxUlb5MNPQJ6d8PQZEkD47Gf94Uvj5eTXgRYH0g9XsLsM7wsu_xafpLSqccUm5LnnBlW3XV9NVJna4jFASuMB8sU9_9HhNwpKCHcMu9jRiw7IiCow2IGC51VrmAMiyXtT9OfeBAhDJdXx06thT7wTnMEY9oKK2s_X4aoAdEQnFizfnsNR6Kooyr5clmV9PF7Tj9-sro64SgO1nORp2Cx2o5zeVmAxF-95QS1Mzhzm1HuIewsLBr4xvKXJ8uW1aoJlyizgt3EorRZHCpUTZH7QJg2ql1rS12lwXZGlPvu-0ABp4PohFMo9F3pfi0t-mPkzNHKoKMm-b48lbGh0zGEedDkgDG2Ef8UfbXUlSvxNPmiCgS21H8kE5XDmr4yoXo1vY5xF2OeLcOjOlTq0p7YmWvGgAknp2z77AdD17gZYIsx5iBgeLuntwqj1Sg_Ij9VhuThYjyjzKfl-ZCKknkwxw-w8Pg5JfLRBZEKTZ3p_EWw2-ujwB1p2tZ9urZR3GVl1-z7STl5g_qGpQXkIJE11-rtn9Bv6xjYvUd5XVgaYDpC801SMZwc5cpim0j2l3OeYpZjOt7M9141IMt-9zrSkUZunZ6jBCtKkLo5xZYRgBKn4LE_ulrT44qEy-Kbuhhfuu5urJ5TSRKj9m3itwfBSfv744dd73iatuH_vpNApNUgufDVNiXT-ErPey3CQaOEiihVbx8c24IeGMeBIckeufaFhxqCrJsaQMJrzzE84qE4LN622jEqij99VC-VokurJiMBqwoHQGazFfKzCG1bVggVE6CyE2e3cD_isJPPusnjNjjcO79mXr8m533OGDDQo-dV0-irm9hlOWpKBb9Kio05I0iZmdOa-Q6FXSjMv4tyQnbMZByuKMVhPDCEMf4HkxrOSuoQRVQ-6W0Kpxvetr37YkqvVHunY-gs8MHSRxqnEDMKIZHfLEIEJ015TEyPzELNAbrx8iat6y4p0iXVLbcqEbLVGIEqajGYTSfHs2-flrKDaziq8FyORMfavv_7DfM91sSrBL2VZ8Y1tqpVgbAmLtITFvhrM_j_lNtWYbr-L_41Jz5bZfHWe44jZ3dfJ2rylI0NdPxkJo1LmyQHB29F7XTw-YJAbnqQ-l8dZN09fF0s2D2ktw2eUlWMZNBnAdZ3RCNyoW9eUt0UDWzw3229f3tvR8PYKLJ7xKTI5em6ARn7DY8gSyMTZp1RF30mXG8g1SiLLlbcuLAMY6Ae_UwX3rsQKE9GmcO0z3NQXX01zFZNQsH--cIrWzYpsZarV9taJSS8HSTGDcxOhkM7TgDxantiTMgHM1hHieQtDAuxEuI69opvnXYzKmRAIKL4Se33aDXm4C-GZzdRUT7mGggygVIanLp3lIDNXlfOhjocqKiRZpoLA1enoClQbPQ6gvInnP8z__AsrKmTWQgYAAA==.eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly9XQUJJLUlORElBLUNFTlRSQUwtQS1QUklNQVJZLXJlZGlyZWN0LmFuYWx5c2lzLndpbmRvd3MubmV0IiwiZXhwIjoxNzE1NzY0Njg0LCJhbGxvd0FjY2Vzc092ZXJQdWJsaWNJbnRlcm5ldCI6dHJ1ZX0=" frameborder="0" allowFullScreen="true"></iframe>  -->
+    <section id="report-container" class="embed-container px-10 mx-10 my-5" style="width:100%;height: 70rem;">
+    </section>
+    
+        <!-- Used to display report embed error messages -->
+        <section class="error-container m-5">
+        </section>
+    <!-- <iframe title="proj1" width="1140" height="541.25" src="https://app.powerbi.com/reportEmbed?uid=xc7p5" frameborder="0" allowFullScreen="true"></iframe>  -->
+   {% include 'Footer_medpred.html' %}
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/powerbi-client/2.15.1/powerbi.min.js" integrity="sha512-OWIl8Xrlo8yQjWN5LcMz5SIgNnzcJqeelChqPMIeQGnEFJ4m1fWWn668AEXBrKlsuVbvDebTUJGLRCtRCCiFkg==" crossorigin="anonymous"></script>
+
+</body>
+
+{% endblock content %}

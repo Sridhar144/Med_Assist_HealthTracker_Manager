@@ -1,0 +1,60 @@
+{% extends "base_medpred.html" %}
+
+{% load static %}
+
+{% block title %}
+MedPred | Test for diseases in the most effective way
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'medpred/Header.css' %}">
+<link rel="stylesheet" href="{% static 'medScan_res_css\index-35QkwXAN.css' %}">
+<link rel="stylesheet" href="{% static 'medpred/Footer.css' %}">
+
+<body>
+
+    {% if user.is_authenticated %}
+    {% include 'Header_medpred.html' %}
+
+
+    <!-- Background image -->
+    <div class="bg-[url('/static/bg_img2.jpg')] bg-cover h-screen flex justify-center" id="bgimg">
+
+        <!-- Card -->
+        <div class="mt-32 w-96 sm:w-4/5 rounded-xl backdrop-blur-xl h-5/6 pt-16">
+            <!-- Header -->
+            <div class="text-center w-rounded-t-6xl text-7xl font-roboto text-slate-100 px-10">
+                <h1 id="typewriter" class="font-bold"></h1>
+                <script>
+                    const words = ["Your MedScan Results"];
+                    let i = 0;
+                    let j = 0;
+                    let currentWord = "";
+                    let isDeleting = false;
+
+                    function type() {
+                        currentWord = words[i];
+                        document.getElementById("typewriter").textContent = currentWord.substring(0, j + 1);
+                        j++;
+                        setTimeout(type, 100);
+                    }
+
+                    type();
+                </script>
+            </div>
+            <!-- Content -->
+            <div class="px-10 mt-5 text-center">
+                <p id="content1" class="text-2xl font-roboto text-slate-100">{{diseases_str}}</p>
+                <p id="content1" class="text-2xl font-roboto text-slate-100">{{symptoms_str}}</p>
+                <p id="content1" class="text-2xl font-roboto text-slate-100"> {{treatments_str}}</p>
+            </div>
+        </div>
+    </div>
+    {% include 'Footer_medpred.html' %}
+    {%else%}
+    {% include 'error_message.html' %}
+    {%endif%}
+</body>
+
+{% endblock content %}

@@ -1,0 +1,107 @@
+{% extends "base_medpred.html" %}
+
+{% load static %}
+
+{% block title %}
+    MedAssist | Your medical assistant
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'medpred/Header.css' %}">
+<link rel="stylesheet" href="{% static 'introduction_css/style.css' %}">
+<link rel="stylesheet" href="{% static 'medpred/Footer.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    #content1 {
+      font-family: 'Source Sans Pro', sans-serif;
+      font-weight: 700;
+      color: black !important;;
+    }
+
+    #content2 {
+      font-weight: 600;
+
+      /* color: black !important;; */
+    }
+    .footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 10vh; /* Adjust the height as needed */
+  background-color: #f5f5f5; /* Add a background color to the footer */
+}
+
+@media (min-width: 1200px) { /* XL */
+    .p-xl-5 {
+        padding-left: 15rem !important;
+        padding-right: 15rem !important;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) { /* LG */
+    .p-lg-4 {
+        padding-left: 10rem !important;
+        padding-right: 10rem !important;
+    }
+}
+
+@media (min-width: 768px)  { /* MD */
+    .p-md-3 {
+        padding-left: 5rem !important;
+        padding-right: 5rem !important;
+    }
+}
+</style>
+<body>
+    <!-- Navbar -->
+    {% if user.is_authenticated %}
+        {% include 'Header_medpred.html' %}
+    {% else %}
+        {% include 'header_authenticate.html' %}
+    {% endif %}
+    <!-- Background image -->
+    <div class="h-screen flex justify-center" id="bgimg">
+        <div class="bg-[url('/static/bg_img2.jpg')] bg-cover" id="bgimg">
+            <!-- Wrapper div for scrolling -->
+            <div class="h-screen pad_proper p-xl-5 p-lg-4 p-md-3 p-sm-2 overflow-y-auto">
+              <!-- Card -->
+              <div class="mt-20 rounded-xl backdrop-blur-xl h-4/6 pt-16">
+                <!-- Header -->
+                <div class="text-center w-rounded-t-6xl text-7xl font-roboto text-slate-100 px-10">
+                  <h1 id="typewriter" class="font-bold"></h1>
+                  <script>
+                    const words = ["Welcome to Med Assist!"];
+                    let i = 0;
+                    let j = 0;
+                    let currentWord = "";
+                    let isDeleting = false;
+          
+                    function type() {
+                      currentWord = words[i];
+                      document.getElementById("typewriter").textContent = currentWord.substring(0, j + 1);
+                      j++;
+                      setTimeout(type, 100);
+                    }
+          
+                    type();
+                  </script>
+                </div>
+                <!-- Content -->
+                <div class="px-10 mt-5">
+                  <p id="content1" class="text-5xl font-roboto text-slate-100 italic text-center mb-8">An Intelligent Health Prediction and Emergency Assistance System</p>
+                  <p id="content2" class="text-2xl font-roboto text-slate-100">In the realm of healthcare, the integration of advanced technologies has paved the way for groundbreaking innovations. Our project, Med Assist, aims to revolutionize the way we approach disease diagnosis and emergency response. Leveraging the power of machine learning alogorithms, this project focuses on predicting both high-end and low-end diseases based on presented symptoms. Additionally, it incorporates a crucial feature to swiftly identify and connect individuals with the closest hospital during emergencies.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+          {% include 'Footer_medpred.html' %}
+</body>
+
+{% endblock content %}
