@@ -21,5 +21,8 @@ urlpatterns = [
     path('medpred/heart-disease-result/', views.heart_result, name='heart_result'),
     path('medpred/cancer-result/', views.cancer_result, name='cancer_result'),
     path('medpred/covid-result/', views.covid_result, name='covid_result'),
+    path('personal_dashboard/', views.personal_dashboard, name='personal_dashboard'),   
+    
+    path('card_dashboard/', views.card_dashboard, name='card_dashboard'),
     
 ]

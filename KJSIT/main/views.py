@@ -3,8 +3,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from joblib import load
-
-from .models import Person, Contact_info
+from .data_conversion import conversion
+from .models import Person, Contact_info, History
 
 
 covid_model = load('./main/Models/Covid.joblib')
@@ -44,8 +44,27 @@ def handlesignup(request):
         profile=Person(username=username, email=email)
         profile.save()
         messages.success(request, "Your account has been created successfully")
-        return redirect('login')
+        user=authenticate(username=username,password=pass1)
+        if user is not None:
+            login(request, user)
+            # print("user is logged in")
+            messages.success(request, "Logged In!")
+            return redirect("intro")
+        else:
+            messages.error(request, "Invalid Credentials, please try again")
+            return redirect("login")
     return render(request, 'signup.html')
+
+def personal_dashboard(request):
+    user = request.user
+    hist = History.objects.filter(person=user).values()
+    return render(request, 'dashboard.html', conversion(hist, user))
+
+def card_dashboard(request):
+    user = request.user
+    hist = History.objects.filter(person=user).values()
+    return render(request, 'card_dashboard.html', conversion(hist, user))
+
 
 def userlogin(request):
     if request.method=='POST':
@@ -122,19 +141,35 @@ def diabetes_result(request):
         glucose = request.POST['glucose']
         features=[gender,age,hypertension, heart_disease,bmi, hba, glucose, current, ever, former, never, noinfo]
         y_pred = diabetes_model.predict([features])[0]
+        prob=0
         diabetes_prob=diabetes_model.predict_proba([features])[0]
-        if y_pred==0:
+        if y_pred!=0:
             result_diabetes="You have Diabetes"
             prob = round(diabetes_prob[0]*100, 2)
+            print(prob)
+            prob=100-prob
+            print(prob)
             if prob>80:
+                message="Get Checked by the earliest"
                 disease="We advice you to consult a doctor and get yourself checked immediately"
         
         else:
             result_diabetes="You don't have Diabetes"
             prob = round(diabetes_prob[1]*100, 2)
+            print(prob)
+            prob=100-prob
+            print(prob)
             if prob>80:
                 disease="Congratulations! You're safe and healthy"
-
+                message=disease
+        resu = ''
+        if(y_pred==0):
+            resu = 'positive'
+        else:
+            resu = 'negative'
+        user = request.user
+        ins = History(app= "MedPred", disease="diabetes", result= resu, probability = prob, person=user, message=message)
+        ins.save()
         return render(request, 'result.html',{'result':result_diabetes, 'probability': prob, 'disea':disease})
 
 def heart_result(request):
@@ -154,17 +189,27 @@ def heart_result(request):
         array=[age, gender,chestpain, Blood_Pressure, cholesterol,0,0, heart_rate, angina, st,0, vessels,thal]
         y_pred = heart_disease_model.predict([array])[0]
         heart_prob = heart_disease_model.predict_proba([array])[0]
+        prob=0
         if y_pred==0:
             result_heart="You don't have Heart Disease"
             prob = round(heart_prob[0]*100, 2)
             if prob>80:
+                message=disease
                 disease="Congratulations! You're safe and healthy"        
         else:
             result_heart="You have Heart Disease"
             prob = round(heart_prob[1]*100, 2)
             if prob>80:
+                message="Get Checked by the earliest"
                 disease="We advice you to consult a doctor and get yourself checked immediately"
-
+        resu = ''
+        if(y_pred==0):
+            resu = 'positive'
+        else:
+            resu = 'negative'
+        user = request.user
+        ins = History(app= "MedPred", disease="Heart Disease", result= resu, probability = prob, person=user)
+        ins.save()
         return render(request, 'result.html',{'result':result_heart, 'probability': prob, 'disea': disease})
 
 def cancer_result(request):
@@ -185,13 +230,22 @@ def cancer_result(request):
             result_cancer="You don't have Breast Cancer"
             prob=round(cancer_prob[0]*100, 2)
             if prob>80:
+                message=disease
                 disease="Congratulations! You're safe and healthy"        
         else:
             result_cancer = "You have Breast-Cancer"
             prob = round(cancer_prob[1]*100, 2)
             if prob>80:
+                message="Get Checked by the earliest"
                 disease="We advice you to consult a doctor and get yourself checked immediately"
-
+        resu = ''
+        if(y_pred==0):
+            resu = 'positive'
+        else:
+            resu = 'negative'
+        user = request.user
+        ins = History(app= "MedPred", disease="Cancer", result= resu, probability = prob, person=user)
+        ins.save()
         return render(request, 'result.html',{'result': result_cancer, "probability": prob, 'disea':disease})
 
 def covid_result(request):
@@ -215,13 +269,22 @@ def covid_result(request):
             result_covid = "You don't have Covid-19 disease"
             prob = round(covid_prob[0]*100, 2)
             if prob>80:
+                message=disease
                 disease="Congratulations! You're safe and healthy"
         else:   
             result_covid = "You have Covid-19 disease"
             prob = round(covid_prob[1]*100, 2)
             if prob>80:
                 disease="We advice you to consult a doctor and get yourself checked immediately"
-
+                message="Get Checked by the earliest"
+        resu = ''
+        if(y_pred==0):
+            resu = 'positive'
+        else:
+            resu = 'negative'
+        user = request.user
+        ins = History(app= "MedPred", disease="Covid", result= resu, probability = prob, person=user)
+        ins.save()
         return render(request, 'result.html', {'result' : result_covid, 'probability':prob, 'disea':disease})
     
 
@@ -381,6 +444,11 @@ def medscresults(request):
         features = [itching, skin_rash, 0, continuous_sneezing, shivering, chills, joint_pain, 0, 0, 0, 0, vomiting, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, cough, 0, 0, breathlessness, sweating, 0, 0, headache, 0, 0, nausea, 0, 0, 0, 0, 0, diarrhoea, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, chest_pain, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, muscle_pain, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         y_pred = low_end_model.predict([features])[0]
         index = diseases.index(y_pred)
+
+        resu = 'positive'
+        user = request.user
+        ins = History(app= "MedScan", disease=y_pred, result= resu, probability = 100, person=user)
+        ins.save()
 
         diseases_str = "Disease: " + y_pred
         symptoms_str = "Symptoms: " + symptoms[index][0] + ", " + symptoms[index][1] + ", " + symptoms[index][2]
